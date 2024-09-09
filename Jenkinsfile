@@ -29,7 +29,7 @@ pipeline {
 
                     // add application.yml
                     withCredentials([file(credentialsId: 'banpoxiii-server-properties', variable: 'APP_YML')]) {
-                        sh 'cp $APP_YML src/main/resources/application.yml'
+                        sh 'sudo cp $APP_YML src/main/resources/application.yml'
                     }
 
                     withEnv(["DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}"]) {
