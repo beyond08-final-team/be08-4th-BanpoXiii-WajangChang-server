@@ -20,7 +20,6 @@ COPY build.gradle settings.gradle ./
 COPY src ./src
 
 # Download dependencies and build the application
-RUN gradle build --no-daemon
 RUN gradle bootJar --no-daemon
 
 # Step 2: Use the official OpenJDK 17 image to run the application
