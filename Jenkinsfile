@@ -2,7 +2,6 @@ pipeline {
     agent any
     tools {
         git 'Default'
-        gradle 'gradle'
     }
     environment {
         DOCKER_IMAGE_NAME = 'cloudyong/banpoxiii-server'
@@ -19,31 +18,32 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'gradle --version'
+                script() {
+
+                    sh 'docker logout'
+                    
+                    // docker login
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                    }
+
+                    // add application.yml
+                    withCredentials([file(credentialsId: 'banpoxiii-server-properties', variable: 'APP_YML')]) {
+                        sh 'cp $APP_YML src/main/resources/application.yml'
+                    }
+
+                    withEnv(["DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}"]) {
+                        sh 'docker build --no-cache -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ./'
+                        sh 'docker image inspect ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}'
+                        sh 'docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}'
+                    }
+
+                    sh 'docker logout'
+
+                }
 
             }
         }
-        // stage('Docker Image Build & Push') {
-        //     steps {
-        //         script() {
-        //             echo "DockerImageTag: ${DOCKER_IMAGE_TAG}"
-                    
-        //             sh 'docker logout'
-                    
-        //             withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-        //                 sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-        //             }
-                    
-        //             withEnv(["DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}"]) {
-        //                 sh 'docker build --no-cache -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ./'
-        //                 sh 'docker image inspect ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}'
-        //                 sh 'docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}'
-        //             }
-        //             sh 'docker logout'
-        //         }
-        //     }
-        // }
-
         // stage('Deploy to Ec2') {
         //     steps {
         //         script() {
