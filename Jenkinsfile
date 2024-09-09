@@ -62,7 +62,7 @@ pipeline {
                                         execCommand: """
                                             sudo docker pull ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
                                             sudo docker container rm -f banpoxiii-server || true
-                                            sudo docker run -d --name banpoxiii-server -p 30021:80 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+                                            sudo docker run -d --name banpoxiii-server -p 30021:8080 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
                                         """
                                     )
                                 ]
