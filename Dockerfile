@@ -1,11 +1,14 @@
 # Step 1: Use the official OpenJDK image to build the application
 FROM openjdk:17-alpine AS build
 
+# Install dependencies
+RUN apk add --no-cache curl unzip
+
 # Install Gradle
-RUN apk add --no-cache curl
-RUN curl -sSL https://services.gradle.org/distributions/gradle-7.4.2-bin.zip -o gradle.zip && \
+RUN curl -sSL https://services.gradle.org/distributions/gradle-7.6-bin.zip -o gradle.zip && \
     unzip gradle.zip -d /opt && \
-    ln -s /opt/gradle-7.4.2/bin/gradle /usr/bin/gradle
+    ln -s /opt/gradle-7.6/bin/gradle /usr/bin/gradle && \
+    rm gradle.zip
 
 # Set the working directory inside the container
 WORKDIR /app
