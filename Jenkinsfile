@@ -46,32 +46,33 @@ pipeline {
 
             }
         }
-        // stage('Deploy to Ec2') {
-        //     steps {
-        //         script() {
 
-        //             sshPublisher(
-        //                 failOnError: true,
-        //                 publishers: [
-        //                     sshPublisherDesc(
-        //                         configName: 'ec2-banpoxiii-web',
-        //                         verbose: true,
-        //                         transfers: [
-        //                             sshTransfer(
-        //                                 execCommand: """
-        //                                     sudo docker pull ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
-        //                                     sudo docker container rm -f banpoxiii-web || true
-        //                                     sudo docker run -d --name banpoxiii-web -p 30020:80 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
-        //                                 """
-        //                             )
-        //                         ]
-        //                     )
-        //                 ]
-        //             )
+        stage('Deploy to Ec2') {
+            steps {
+                script() {
+
+                    sshPublisher(
+                        failOnError: true,
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'ec2-banpoxiii-server',
+                                verbose: true,
+                                transfers: [
+                                    sshTransfer(
+                                        execCommand: """
+                                            sudo docker pull ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+                                            sudo docker container rm -f banpoxiii-server || true
+                                            sudo docker run -d --name banpoxiii-server -p 30021:80 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+                                        """
+                                    )
+                                ]
+                            )
+                        ]
+                    )
                     
-        //         }
-        //     }
-        // }
+                }
+            }
+        }
     }
     post {
         success {
