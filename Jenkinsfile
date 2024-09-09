@@ -27,6 +27,8 @@ pipeline {
                         sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                     }
                     sh 'ls -l'
+                    sh 'chmod -R 777 src/main/resources'
+
                     // add application.yml
                     withCredentials([file(credentialsId: 'banpoxiii-server-properties', variable: 'APP_YML')]) {
                         sh 'cp $APP_YML src/main/resources/application.yml'
