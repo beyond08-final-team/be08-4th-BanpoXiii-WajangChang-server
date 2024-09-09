@@ -2,7 +2,6 @@ pipeline {
     agent any
     tools {
         git 'Default'
-        gradle 'gradle'
     }
     environment {
         DOCKER_IMAGE_NAME = 'cloudyong/banpoxiii-server'
@@ -43,7 +42,7 @@ pipeline {
         //         }
         //     }
         // }
-        
+
         // stage('Deploy to Ec2') {
         //     steps {
         //         script() {
