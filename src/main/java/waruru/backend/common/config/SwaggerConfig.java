@@ -19,7 +19,7 @@ public class SwaggerConfig {
     private Info apiInfo(){
         return new Info()
                 .title("WaJangChang API")
-                .version("1.3")
+                .version("1.4")
                 .description("WaJangChangu API Server");
     }
 }
